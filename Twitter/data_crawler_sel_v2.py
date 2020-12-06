@@ -1,6 +1,6 @@
 import os
-import pandas as pd 
-
+import pandas as pd
+#ksfsdklfjjjjjjjjjj
 import time
 import datetime
 from datetime import timedelta
@@ -16,7 +16,7 @@ from utils import *
 options = Options()
 chrome_exe = '/home/luis/data_crawling_elections/chromedriver'
 options.add_argument('--headless')
-options.add_argument('--disable-gpu')  
+options.add_argument('--disable-gpu')
 
 
 def timeTransformation(start_time):
@@ -46,11 +46,11 @@ def checkingUserAccount(user_tag):
 
 def userJoinDate(user_tag):
     # checks for the date when the user joined twitter
-    query = "https://twitter.com/" + str(user_tag) 
+    query = "https://twitter.com/" + str(user_tag)
     driver = webdriver.Chrome(executable_path=chrome_exe,options=options)
     driver.get(query)
     time.sleep(1)
-    
+
     aa = driver.find_element_by_css_selector('span.css-901oao.css-16my406.r-1re7ezh.r-4qtqp9.r-1qd0xha.r-ad9z0x.r-zso239.r-bcqeeo.r-qvutc0')
     print(aa.text)
     joined_date = datetime.datetime.strptime(aa.text.replace('Joined ',''), "%B %Y").date()
@@ -87,7 +87,7 @@ def main():
 
         # Check first that the usr account exists and if we have evaluated this user already
         if not os.path.isfile('Users_tweets/' + user_tag + '.csv' ) and user_tag not in list_suspended_accounts:
-            
+
             if not checkingUserAccount(user_tag):
 
                 pd_user = pd.DataFrame(columns=['Username','User_tag','Date','Tweet','Replies','Retweets','Likes','Retweet'])
@@ -95,7 +95,7 @@ def main():
 
                 # Before start crawling check, when the user joined to start crawling from that date
                 #joined_date = userJoinDate(user_tag)
-                finish_time = date(2020,11,13) 
+                finish_time = date(2020,11,13)
                 #proposed_start_time = date(2020,11,3)  # election date
                 start_time = date(2020,11,3)
 
@@ -105,10 +105,10 @@ def main():
                 #else:
                 #    start_time = proposed_start_time
 
-                
+
                 # while start_time and finish_time are different, keep crawling
                 while True:
-                    
+
                     start_time_str,end_time_str,end_time = timeTransformation(start_time)
                     # Access to Twitter
                     query = 'https://twitter.com/search?q=(from%3A' + user_tag + ')%20until%3A'+ end_time_str + '%20since%3A' + start_time_str + '&src=typed_query'
@@ -118,7 +118,7 @@ def main():
 
                     #if accountProtected(driver):
                     #    break
-                    try: 
+                    try:
                         pd_user = retrievingTweetsFromUser(driver,pd_user)
                         start_time = end_time
 
@@ -126,11 +126,11 @@ def main():
                             break
                     except:
                         break
-                
+
                 # save the users tweets
                 pd_user = pd_user.drop_duplicates()
                 pd_user.to_csv('Users_tweets/' + user_tag + '.csv')
-            
+
             else:
                 with open('suspended_accounts.txt', 'a') as f:
                     f.write(user_tag + '\n')
@@ -143,7 +143,7 @@ def main():
 
             elif user_tag in list_suspended_accounts:
                 print('User account in black list')
-               
+
 
 if __name__ == "__main__":
     main()
