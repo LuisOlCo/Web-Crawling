@@ -1,2 +1,4 @@
-1 . Create folder Users_tweets
-2.  Create folder Users_info
+1. Create folder Users_tweets
+2. Create folder Users_info
+3. Add pandas called depressed_username_and_userid with the users we want to scrap
+4. Make sure to add the file with the twitter credentials as secret_twitter_credentials
